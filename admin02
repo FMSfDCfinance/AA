@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Inter", sans-serif;
+    background-color: #1e293b; /* Match sidebar background */
+    color: #f1f3f5;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .main-layout {
+    display: flex;
+    gap: 20px;
+  }
+
+  .sidebar {
+    width: 220px;
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+    border: 1px solid #334155;
+  }
+
+  .sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #3b82f6;
+    font-size: 18px;
+  }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #38bdf8;
+    }
+
+    .proof-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .proof-card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .proof-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .proof-detail {
+      margin-bottom: 0.75rem;
+    }
+
+    .proof-label {
+      font-weight: 600;
+      color: #94a3b8;
+      font-size: 0.875rem;
+      display: block;
+    }
+
+    .proof-value {
+      font-size: 1rem;
+      color: #f1f5f9;
+    }
+
+    .proof-link {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 0.375rem;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .proof-link:hover {
+      background-color: #1d4ed8;
+    }
+
+    .empty-card {
+      background-color: #1a202c;
+      border: 1px dashed #475569;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-top: -1rem;
+    }
+
+    .file-viewer {
+      margin-top: 1rem;
+      width: 100%;
+      max-height: 600px;
+      border: none;
+      border-radius: 0.5rem;
+    }
+
+    .empty-message {
+      font-size: 1rem;
+      color: #cbd5e1;
+    }
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar ul li {
+    margin-bottom: 12px;
+  }
+
+  .sidebar ul li a {
+    color: #f1f5f9;
+    text-decoration: none;
+    font-size: 15px;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+
+  .sidebar ul li a:hover {
+    background-color: #3b82f6;
+  }
+
+  .container {
+    flex: 1;
+    background: #0f172a; /* Darker panel */
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 30px;
+    color: #f8fafc;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  h2,
+  h3 {
+    text-align: center;
+    color: #3b82f6;
+    margin-bottom: 16px;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-size: 15px;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    background-color: #0f172a;
+    border-color: #3b82f6;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #2563eb;
+  }
+
+  .transaction-log {
+    margin-top: 20px;
+    background-color: #1e293b;
+    padding: 14px;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    max-height: 240px;
+    overflow-y: auto;
+    font-size: 14px;
+    color: #f1f5f9;
+  }
+
+  .withdrawal-entry {
+    border: 1px solid #334155;
+    background-color: #0f172a;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .withdrawal-entry span {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .withdrawal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .withdrawal-buttons button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .withdrawal-buttons .approve {
+    background-color: #22c55e;
+    color: white;
+  }
+
+  .withdrawal-buttons .decline {
+    background-color: #ef4444;
+    color: white;
+  }
+
+  #status {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #3b82f6;
+  }
+
+  .filter-select {
+    margin-top: 10px;
+  }
+
+  .note-field {
+    margin-top: 6px;
+  }
+
+  .export-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar .icon {
+  width: 18px;
+  height: 18px;
+}
+  @media (min-width: 501px) {
+    .withdrawal-buttons {
+      flex-direction: row;
+    }
+
+    .export-btns {
+      flex-direction: row;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .main-layout {
+      flex-direction: column;
+    }
+
+    .sidebar {
+      width: 100%;
+      position: static;
+    }
+
+    .container {
+      margin: 0;
+    }
+  }
+</style>
+  </head>
+  <body>
+<!-- ================================ -->
+<!-- ✦ Admin Welcome Box (Isolated) ✦ -->
+<!-- ================================ -->
+
+<div class="admin-welcome-box">
+  <div class="admin-welcome-content">
+    <svg class="admin-welcome-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24" stroke="#3b82f6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="admin-welcome-text">
+      <h2>Welcome Admin</h2>
+    </div>
+  </div>
+</div>
+
+<style>
+  .admin-welcome-box {
+    flex: 1;
+    background-color: #0f172a;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    color: #e2e8f0;
+    width: 100%;
+    max-width: 1000px;
+    height: 120px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .admin-welcome-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .admin-welcome-icon {
+    width: 40px;
+    height: 40px;
+    stroke-width: 2.2;
+    flex-shrink: 0;
+  }
+
+  .admin-welcome-text h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #3b82f6;
+  }
+
+  @media (max-width: 600px) {
+    .admin-welcome-box {
+      padding: 16px;
+      height: auto;
+    }
+
+    .admin-welcome-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .admin-welcome-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .admin-welcome-text h2 {
+      font-size: 16px;
+    }
+  }
+</style>
+<!-- Include Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<div class="main-layout">
+  <div class="sidebar">
+    <h3>Admin Menu</h3>
+    <ul>
+      <li>
+        <a href="admin01">
+          <i data-lucide="layout-dashboard" class="icon"></i>
+          withdrawals
+        </a>
+      </li>
+      <li>
+        <a href="admin02">
+          <i data-lucide="credit-card" class="icon"></i>
+          Payment
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Activate Lucide Icons -->
+<script>
+  lucide.createIcons();
+</script>
+
+    <div class="container">
+      <!-- [ALL YOUR EXISTING CONTENT GOES HERE] -->
+    </div>
+  </div>
+</body>
+    <div class="container">
+  <h1>Payment </h1>
+
+  <div class="proof-list" id="proofList">
+    <p class="empty-message">Loading proofs...</p>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const proofList = document.getElementById("proofList");
+
+    async function loadProofs() {
+      try {
+        const snapshot = await db.collection("payment_proofs").orderBy("uploadedAt", "desc").get();
+
+        if (snapshot.empty) {
+          proofList.innerHTML = '<p class="empty-message">No proofs uploaded yet.</p>';
+          return;
+        }
+
+        proofList.innerHTML = "";
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+
+          // Main proof card
+          const card = document.createElement("div");
+          card.className = "proof-card";
+          card.innerHTML = `
+            <div class="proof-detail">
+              <span class="proof-label">Currency</span>
+              <span class="proof-value">${data.currency?.toUpperCase() || '-'}</span>
+            </div>
+            <div class="proof-detail">
+              <span class="proof-label">Network</span>
+              <span class="proof-value">${data.network?.toUpperCase() || '-'}</span>
+            </div>
+            <div class="proof-detail">
+              <span class="proof-label">Amount</span>
+              <span class="proof-value">$${parseFloat(data.amount).toFixed(2)}</span>
+            </div>
+            <div class="proof-detail">
+              <span class="proof-label">Date</span>
+              <span class="proof-value">${new Date(data.uploadedAt).toLocaleString()}</span>
+            </div>
+            <button class="proof-link">View Proof File</button>
+          `;
+
+          // Empty card for file viewer
+          const emptyCard = document.createElement("div");
+          emptyCard.className = "empty-card";
+          emptyCard.innerHTML = `<span style="color: #64748b;">Click "View Proof File" to load the document here.</span>`;
+
+          // Append both
+          proofList.appendChild(card);
+          proofList.appendChild(emptyCard);
+
+          // Handle button click
+          const viewBtn = card.querySelector(".proof-link");
+          viewBtn.addEventListener("click", () => {
+            let fileUrl = data.fileUrl;
+            if (!fileUrl) {
+              emptyCard.innerHTML = `<span style="color: #f87171;">No file available</span>`;
+              return;
+            }
+
+            let isImage = /\.(jpeg|jpg|png|gif|webp)$/i.test(fileUrl);
+            let isPdf = /\.pdf$/i.test(fileUrl);
+
+            if (isImage) {
+              emptyCard.innerHTML = `<img src="${fileUrl}" alt="Proof File" class="file-viewer" style="max-width:100%; height:auto;" />`;
+            } else if (isPdf) {
+              emptyCard.innerHTML = `<iframe src="${fileUrl}" class="file-viewer"></iframe>`;
+            } else {
+              emptyCard.innerHTML = `<a href="${fileUrl}" target="_blank" class="proof-link">Open File</a>`;
+            }
+          });
+        });
+      } catch (error) {
+        console.error("Error loading proofs:", error);
+        proofList.innerHTML = '<p class="empty-message">Failed to load payment proofs.</p>';
+      }
+    }
+
+    loadProofs();
+  </script>
+</body>
+</html>

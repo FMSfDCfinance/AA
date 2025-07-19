@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Make a Deposit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6;
+      color: #1f2937;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background-color: #fff;
+      border-bottom: 1px solid #d1d5db;
+    }
+
+    .back-button {
+      text-decoration: none;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #1f2937;
+      background-color: transparent;
+      color: #1f2937;
+      transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #374151;
+      color: #fff;
+      border-color: #374151;
+    }
+
+    .brand-logo svg {
+      height: 36px;
+      width: auto;
+    }
+
+    .breadcrumb {
+      padding: 1rem 1.5rem;
+      font-size: 0.875rem;
+      color: #4b5563;
+    }
+
+    .card {
+      max-width: 520px;
+      margin: 3rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-title {
+      font-size: 1.375rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #374151;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1.25rem;
+      font-size: 1rem;
+      background: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      color: #111827;
+      transition: border-color 0.3s ease;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+
+    .logo-display {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .logo-display img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      filter: grayscale(20%);
+    }
+
+    .btn {
+      width: 100%;
+      background-color: #1e3a8a;
+      color: #f9fafb;
+      font-weight: 600;
+      border: none;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    .history-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.875rem;
+    }
+
+    .status {
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.375rem;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: capitalize;
+    }
+
+.status {
+  position: relative;
+  display: inline-block;
+  padding: 0.4em 0.8em;
+  border-radius: 6px;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+/* Individual status styles */
+.status.pending {
+  background: #fde68a;
+  color: #78350f;
+}
+.status.waiting {
+  background: #bfdbfe;
+  color: #1e3a8a;
+}
+.status.success {
+  background: #bbf7d0;
+  color: #065f46;
+}
+
+/* Shine effect overlay */
+.status::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: shine 2.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+    .timestamp, .countdown {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.25rem;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <a href="javascript:history.back()" class="back-button">&larr; Back</a>
+    <div class="brand-logo">
+      <!-- Inline SVG -->
+<div style="width: max-content;">
+  <svg viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Create the shimmer gradient -->
+      <linearGradient id="shine-gradient" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="white" stop-opacity="0" />
+        <stop offset="50%" stop-color="white" stop-opacity="0.8" />
+        <stop offset="100%" stop-color="white" stop-opacity="0" />
+      </linearGradient>
+
+      <!-- Animate the gradient -->
+      <mask id="shine-mask">
+        <rect x="0" y="0" width="200" height="50" fill="url(#shine-gradient)">
+          <animate attributeName="x" from="-200" to="200" dur="2s" repeatCount="indefinite" />
+        </rect>
+      </mask>
+    </defs>
+
+    <!-- Text with solid fill color -->
+    <text x="0" y="35" font-family="Inter, sans-serif" font-size="32" fill="#1e3a8a" font-weight="600">
+      STOCTPAY
+    </text>
+
+    <!-- Overlay shimmering shine using the mask -->
+    <text x="0" y="35" font-family="Inter, sans-serif" font-size="32" fill="white" font-weight="600" mask="url(#shine-mask)">
+      STOCTPAY
+    </text>
+  </svg>
+</div>
+  </header>
+
+  <div class="breadcrumb">Home / Make a Deposit</div>
+
+  <div class="card">
+    <div class="card-title">Select Payment Method</div>
+    <div class="logo-display" id="coinLogo"></div>
+    <label for="currency">Currency</label>
+    <select id="currency" onchange="updateNetworks()">
+      <option value="">-- Choose --</option>
+      <option value="btc">BTC</option>
+      <option value="usdt">USDT</option>
+      <option value="eth">ETH</option>
+      <option value="sol">SOL</option>
+      <option value="xrp">XRP</option>
+    </select>
+    <label for="network">Network</label>
+    <select id="network">
+      <option value="">-- Select a currency first --</option>
+    </select>
+    <label for="amount">Amount</label>
+    <input type="number" id="amount" placeholder="Enter amount" min="0" step="any" />
+    <button class="btn" onclick="submitDeposit()">Continue</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Deposit History</div>
+    <div id="deposit-history">Loading...</div>
+  </div>
+
+  <!-- Firebase + Script -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const coinLogos = {
+      usdt: "https://img.icons8.com/?size=100&id=DEDR1BLPBScO&format=png",
+      btc: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
+      eth: "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
+      sol: "https://assets.coingecko.com/coins/images/4128/large/solana.png",
+      xrp: "https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png"
+    };
+
+    const networks = {
+      usdt: ["trc20", "erc20", "bep20"],
+      btc: ["bitcoin"],
+      eth: ["ethereum"],
+      sol: ["solana"],
+      xrp: ["ripple"]
+    };
+
+    function updateNetworks() {
+      const currency = document.getElementById("currency").value;
+      const network = document.getElementById("network");
+      const logoDisplay = document.getElementById("coinLogo");
+      logoDisplay.innerHTML = "";
+
+      if (coinLogos[currency]) {
+        const img = document.createElement("img");
+        img.src = coinLogos[currency];
+        img.alt = currency.toUpperCase();
+        logoDisplay.appendChild(img);
+      }
+
+      network.innerHTML = "";
+      if (networks[currency]) {
+        networks[currency].forEach(net => {
+          const opt = document.createElement("option");
+          opt.value = net;
+          opt.textContent = net.toUpperCase();
+          network.appendChild(opt);
+        });
+      }
+    }
+
+    function submitDeposit() {
+      const currency = document.getElementById("currency").value;
+      const network = document.getElementById("network").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      if (!currency || !network || isNaN(amount) || amount <= 0) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+      db.collection("deposits").add({
+        currency,
+        network,
+        amount,
+        status: "pending",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(docRef => {
+        window.location.href = `paynow?id=${docRef.id}&currency=${currency}&network=${network}&amount=${amount}`;
+      }).catch(err => alert("Error: " + err.message));
+    }
+
+    function formatTimestamp(date) {
+      return date.toLocaleString();
+    }
+
+    function getCountdown(createdAt) {
+      const now = new Date();
+      const diff = 4 * 3600000 - (now - createdAt);
+      if (diff <= 0) return "Expired";
+      const hrs = Math.floor(diff / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+      return `${hrs}h ${mins}m ${secs}s`;
+    }
+
+    function loadDeposits() {
+      const historyEl = document.getElementById("deposit-history");
+      db.collection("deposits").orderBy("createdAt", "desc").limit(5).onSnapshot(snapshot => {
+        historyEl.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const id = doc.id;
+          let { currency, amount, status, createdAt } = data;
+          const createdDate = createdAt?.toDate?.() || new Date();
+          if (status === "pending" && new Date() - createdDate >= 4 * 3600000) {
+            db.collection("deposits").doc(id).update({ status: "waiting" });
+            status = "waiting";
+          }
+          const entry = document.createElement("div");
+          entry.className = "history-entry";
+          entry.innerHTML = `
+            <div>
+              ${currency?.toUpperCase?.()} - $${amount}<br>
+              <div class="timestamp">${formatTimestamp(createdDate)}</div>
+              ${status === "pending" ? `<div class="countdown" data-created="${createdDate.getTime()}"></div>` : ""}
+            </div>
+            <div class="status ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</div>
+          `;
+          historyEl.appendChild(entry);
+        });
+        startCountdowns();
+      });
+    }
+
+    function startCountdowns() {
+      setInterval(() => {
+        document.querySelectorAll(".countdown").forEach(el => {
+          const createdAt = new Date(parseInt(el.getAttribute("data-created")));
+          el.textContent = `Time left: ${getCountdown(createdAt)}`;
+        });
+      }, 1000);
+    }
+
+    loadDeposits();
+  </script>
+</body>
+</html>

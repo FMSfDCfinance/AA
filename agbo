@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Inter", sans-serif;
+    background-color: #f1f3f5; /* Match sidebar background */
+    color: #f1f5f9;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .main-layout {
+    display: flex;
+    gap: 20px;
+  }
+
+  .sidebar {
+    width: 220px;
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+    border: 1px solid #334155;
+  }
+
+  .sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #3b82f6;
+    font-size: 18px;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar ul li {
+    margin-bottom: 12px;
+  }
+
+  .sidebar ul li a {
+    color: #f1f5f9;
+    text-decoration: none;
+    font-size: 15px;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+
+  .sidebar ul li a:hover {
+    background-color: #3b82f6;
+  }
+
+  .container {
+    flex: 1;
+    background: #0f172a; /* Darker panel */
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 30px;
+    color: #f8fafc;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  h2,
+  h3 {
+    text-align: center;
+    color: #3b82f6;
+    margin-bottom: 16px;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-size: 15px;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    background-color: #0f172a;
+    border-color: #3b82f6;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #2563eb;
+  }
+
+  .transaction-log {
+    margin-top: 20px;
+    background-color: #1e293b;
+    padding: 14px;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    max-height: 240px;
+    overflow-y: auto;
+    font-size: 14px;
+    color: #f1f5f9;
+  }
+
+  .withdrawal-entry {
+    border: 1px solid #334155;
+    background-color: #0f172a;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .withdrawal-entry span {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .withdrawal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .withdrawal-buttons button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .withdrawal-buttons .approve {
+    background-color: #22c55e;
+    color: white;
+  }
+
+  .withdrawal-buttons .decline {
+    background-color: #ef4444;
+    color: white;
+  }
+
+  #status {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #3b82f6;
+  }
+
+  .filter-select {
+    margin-top: 10px;
+  }
+
+  .note-field {
+    margin-top: 6px;
+  }
+
+  .export-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar .icon {
+  width: 18px;
+  height: 18px;
+}
+  @media (min-width: 501px) {
+    .withdrawal-buttons {
+      flex-direction: row;
+    }
+
+    .export-btns {
+      flex-direction: row;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .main-layout {
+      flex-direction: column;
+    }
+
+    .sidebar {
+      width: 100%;
+      position: static;
+    }
+
+    .container {
+      margin: 0;
+    }
+  }
+</style>
+  </head>
+  <body>
+<!-- Include Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<div class="main-layout">
+  <div class="sidebar">
+    <h3>Admin Menu</h3>
+    <ul>
+      <li>
+        <ul>
+          <li>
+            <a href="admin01">
+              <i data-lucide="layout-dashboard" class="icon"></i>
+              withdrawals
+            </a>
+          </li>
+          <li>
+            <a href="admin02">
+              <i data-lucide="credit-card" class="icon"></i>
+              Payment
+            </a>
+          </li>
+          <li>
+            <a href="admin03">
+              <i data-lucide="dollar-sign" class="icon"></i>
+              User's Deposit Link
+            </a>
+          </li>
+          <li>
+            
+                        <a href="admin07">
+              <i data-lucide="thumbs-up" class="icon"></i>
+              Verify KYC
+                 </a>
+          </li>
+          <li>
+            <a href="admin04">
+              <i data-lucide="thumbs-up" class="icon"></i>
+              Totally User's Like
+            </a>
+          </li>
+          <li>
+<a href="admin08">
+              <i data-lucide="thumbs-up" class="icon"></i>
+              USER'S KYC
+            </a>
+          </li>
+          <li>
+            <a href="admin06">
+              <i data-lucide="trending-up" class="icon"></i>
+              Investment Update
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Activate Lucide Icons -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    lucide.createIcons();
+  });
+</script>
+
+<!-- Activate Lucide Icons -->
+<script>
+  lucide.createIcons();
+</script>
+
+    <div class="container">
+HEY BOSS 
+    </div>
+  </div>
+</body>
+    <div class="container">
+      <h2>Admin Panel</h2>
+      <input
+        type="text"
+        id="searchEmail"
+        placeholder="Search by Email (optional)"
+      />
+      <button onclick="findUserByEmail()">Find UID by Email</button>
+
+      <input type="text" id="uid" placeholder="User UID" />
+      <input type="number" id="amount" placeholder="Amount (£)" />
+      <select id="fundType">
+        <option value="balance">Balance</option>
+        <option value="activeDeposit">Active Deposit</option>
+        <option value="earned">Earned</option>
+        <option value="investment">Investment</option>
+      </select>
+      <input type="text" id="note" placeholder="Optional note" />
+
+      <button onclick="addFunds()">Add Funds</button>
+      <button onclick="removeFunds()">Remove Funds</button>
+      <button onclick="banUser()">Ban User</button>
+      <button onclick="unbanUser()">Unban User</button>
+      <button onclick="viewUser()">View User Info</button>
+      <button onclick="deleteUser()">Delete User</button>
+
+      <h3>Send Email to User</h3>
+      <form action="https://formspree.io/f/mrbqwqzr" method="POST">
+        <input type="email" name="email" placeholder="User Email" required />
+        <input type="text" name="subject" placeholder="Email Subject" required />
+        <textarea
+          name="message"
+          placeholder="Your Message..."
+          rows="4"
+          required
+        ></textarea>
+        <button type="submit">Send Email</button>
+      </form>
+
+      <div id="status"></div>
+      <div class="transaction-log" id="transactions"></div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+      
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const statusEl = document.getElementById("status");
+  const transactionsDiv = document.getElementById("transactions");
+  const withdrawalsDiv = document.getElementById("withdrawals");
+  let allWithdrawals = [];
+
+  async function findUserByEmail() {
+    const email = document.getElementById("searchEmail").value.trim();
+    if (!email) return (statusEl.textContent = "Enter email to search.");
+    try {
+      const snapshot = await db.collection("users").where("email", "==", email).get();
+      if (!snapshot.empty) {
+        const doc = snapshot.docs[0];
+        document.getElementById("uid").value = doc.id;
+        statusEl.textContent = "User UID found and autofilled.";
+      } else {
+        statusEl.textContent = "No user found with that email.";
+      }
+    } catch (e) {
+      statusEl.textContent = "Error: " + e.message;
+    }
+  }
+
+  async function addFunds() {
+    modifyFunds(true);
+  }
+  async function removeFunds() {
+    modifyFunds(false);
+  }
+
+  async function modifyFunds(isAdd) {
+    const uid = document.getElementById("uid").value.trim();
+    const amountInput = document.getElementById("amount").value;
+    const amount = parseFloat(amountInput);
+    const note = document.getElementById("note").value.trim();
+    const fundType = document.getElementById("fundType").value;
+
+    if (!uid || isNaN(amount)) return (statusEl.textContent = "Enter valid UID and amount.");
+    try {
+      const userRef = db.collection("users").doc(uid);
+      let updateData = {};
+      updateData[fundType] = firebase.firestore.FieldValue.increment(isAdd ? amount : -amount);
+
+      await userRef.update(updateData);
+      await userRef.collection("transactions").add({
+        type: isAdd ? "credit" : "debit",
+        amount,
+        note: note || (isAdd ? `Admin top-up to ${fundType}` : `Admin deduction from ${fundType}`),
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      statusEl.textContent = `${isAdd ? "Added" : "Removed"} £${amount.toFixed(2)} ${isAdd ? "to" : "from"} user's ${fundType}.`;
+      viewUser();
+    } catch (error) {
+      statusEl.textContent = "Error: " + error.message;
+    }
+  }
+
+  async function banUser() {
+    setUserBan(true);
+  }
+  async function unbanUser() {
+    setUserBan(false);
+  }
+
+  async function setUserBan(ban) {
+    const uid = document.getElementById("uid").value.trim();
+    if (!uid) return (statusEl.textContent = "Enter UID to proceed.");
+    try {
+      await db.collection("users").doc(uid).update({ banned: ban });
+      statusEl.textContent = `User ${uid} has been ${ban ? "banned" : "unbanned"}.`;
+      viewUser();
+    } catch (error) {
+      statusEl.textContent = "Error: " + error.message;
+    }
+  }
+
+  async function viewUser() {
+    const uid = document.getElementById("uid").value.trim();
+    if (!uid) return (statusEl.textContent = "Enter UID to view info.");
+    try {
+      const doc = await db.collection("users").doc(uid).get();
+      if (!doc.exists) {
+        statusEl.textContent = "User not found.";
+        transactionsDiv.innerHTML = "";
+        return;
+      }
+
+      const data = doc.data();
+      statusEl.textContent = `User Info:
+        Email: ${data.email || "N/A"}
+        Balance: £${(data.balance || 0).toFixed(2)}
+        Active Deposit: £${(data.activeDeposit || 0).toFixed(2)}
+        Earned: £${(data.earned || 0).toFixed(2)}
+        Investment: £${(data.investment || 0).toFixed(2)}
+        Banned: ${data.banned ? "Yes" : "No"}
+      `;
+
+      const transactionsSnapshot = await db
+        .collection("users")
+        .doc(uid)
+        .collection("transactions")
+        .orderBy("timestamp", "desc")
+        .limit(10)
+        .get();
+
+      if (transactionsSnapshot.empty) {
+        transactionsDiv.innerHTML = "<em>No transactions found.</em>";
+      } else {
+        let html = "";
+        transactionsSnapshot.forEach((doc) => {
+          const t = doc.data();
+          const time = t.timestamp ? t.timestamp.toDate().toLocaleString() : "Unknown date";
+          const amt = typeof t.amount === "number" ? t.amount : 0;
+          html += `<div>
+            <strong>${t.type.toUpperCase()}</strong> £${amt.toFixed(2)} - ${t.note || ""} <br /><small>${time}</small>
+          </div><hr />`;
+        });
+        transactionsDiv.innerHTML = html;
+      }
+    } catch (error) {
+      statusEl.textContent = "Error: " + error.message;
+    }
+  }
+
+  async function deleteUser() {
+    const uid = document.getElementById("uid").value.trim();
+    if (!uid) return (statusEl.textContent = "Enter UID to delete.");
+    if (!confirm("Are you sure you want to delete this user?")) return;
+    try {
+      await db.collection("users").doc(uid).delete();
+      statusEl.textContent = "User deleted.";
+      document.getElementById("uid").value = "";
+      transactionsDiv.innerHTML = "";
+    } catch (error) {
+      statusEl.textContent = "Error: " + error.message;
+    }
+  }
+
+  // Withdrawals
+  async function fetchWithdrawals() {
+    try {
+      console.log("Fetching withdrawals...");
+      const snapshot = await db.collectionGroup("withdrawals").orderBy("timestamp", "desc").get();
+      allWithdrawals = snapshot.docs.map(doc => {
+        const data = doc.data();
+        data.id = doc.id;
+        data.uid = doc.ref.parent.parent?.id || "Unknown";
+        return data;
+      });
+      filterWithdrawals();
+      statusEl.textContent = "Withdrawals loaded.";
+    } catch (error) {
+      withdrawalsDiv.textContent = "Error loading withdrawals: " + error.message;
+    }
+  }
+
+  function filterWithdrawals() {
+    const filter = document.getElementById("filterStatus").value;
+    let filtered = allWithdrawals;
+
+    if (filter !== "all") {
+      filtered = allWithdrawals.filter(wd => {
+        const withdrawalStatus = wd.status?.toLowerCase?.() || "";
+        return withdrawalStatus === filter;
+      });
+    }
+
+    renderWithdrawals(filtered);
+  }
+
+  function renderWithdrawals(withdrawals) {
+    withdrawalsDiv.innerHTML = "";
+
+    if (!Array.isArray(withdrawals) || withdrawals.length === 0) {
+      withdrawalsDiv.innerHTML = "<em>No withdrawals found.</em>";
+      return;
+    }
+
+    withdrawals.forEach((wd) => {
+      const dateStr = wd.timestamp?.toDate?.().toLocaleString?.() || "Unknown date";
+      const amount = typeof wd.amount === "number" ? wd.amount : 0;
+      const uid = wd.uid || "N/A";
+      const withdrawalStatus = wd.status || "N/A";
+      const note = wd.note || "-";
+
+      const div = document.createElement("div");
+      div.className = "withdrawal-entry";
+      div.innerHTML = `
+        <span><strong>UID:</strong> ${uid}</span>
+        <span><strong>Amount:</strong> £${amount.toFixed(2)}</span>
+        <span><strong>Status:</strong> ${withdrawalStatus}</span>
+        <span><strong>Date:</strong> ${dateStr}</span>
+        <span><strong>Note:</strong> ${note}</span>
+        <div class="withdrawal-buttons"></div>
+      `;
+
+      const buttonsDiv = div.querySelector(".withdrawal-buttons");
+
+      if (withdrawalStatus.toLowerCase() === "pending") {
+        const approveBtn = document.createElement("button");
+        approveBtn.textContent = "Approve";
+        approveBtn.className = "approve";
+        approveBtn.onclick = () => updateWithdrawalStatus(uid, wd.id, "approved");
+
+        const declineBtn = document.createElement("button");
+        declineBtn.textContent = "Decline";
+        declineBtn.className = "decline";
+        declineBtn.onclick = () => updateWithdrawalStatus(uid, wd.id, "declined");
+
+        buttonsDiv.appendChild(approveBtn);
+        buttonsDiv.appendChild(declineBtn);
+      }
+
+      withdrawalsDiv.appendChild(div);
+    });
+  }
+
+  async function updateWithdrawalStatus(uid, withdrawalId, statusUpdate) {
+    try {
+      const docRef = db.collection("users").doc(uid).collection("withdrawals").doc(withdrawalId);
+      await docRef.update({ status: statusUpdate });
+
+      statusEl.textContent = `Withdrawal ${withdrawalId} marked as ${statusUpdate}.`;
+      await fetchWithdrawals();
+    } catch (error) {
+      statusEl.textContent = "Error updating withdrawal: " + error.message;
+    }
+  }
+
+  function exportWithdrawals(format) {
+    const data = allWithdrawals.map(wd => ({
+      uid: wd.uid || "",
+      amount: typeof wd.amount === "number" ? wd.amount.toFixed(2) : "",
+      status: wd.status || "",
+      note: wd.note || "",
+      timestamp: wd.timestamp ? wd.timestamp.toDate().toISOString() : "",
+    }));
+
+    if (format === "json") {
+      const jsonStr = JSON.stringify(data, null, 2);
+      downloadFile("withdrawals.json", "application/json", jsonStr);
+    } else if (format === "csv") {
+      const headers = ["uid", "amount", "status", "note", "timestamp"];
+      const csvRows = [headers.join(",")];
+      data.forEach(row => {
+        const values = headers.map(h => `"${(row[h] || "").toString().replace(/"/g, '""')}"`);
+        csvRows.push(values.join(","));
+      });
+      const csvStr = csvRows.join("\n");
+      downloadFile("withdrawals.csv", "text/csv", csvStr);
+    }
+  }
+
+  function downloadFile(filename, mimeType, content) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Initial load
+  fetchWithdrawals();
+</script>
+  </body>
+</html>

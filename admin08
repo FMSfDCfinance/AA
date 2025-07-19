@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Titanium FX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f3f5;
+      color: #f1f5f9;
+      margin: 0;
+      padding: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    th, td {
+      padding: 0.8rem 0.6rem;
+      text-align: left;
+      border-bottom: 1px solid #334155;
+      font-size: 0.85rem;
+    }
+
+    th {
+      background-color: #1e293b;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status {
+      font-weight: 600;
+      font-size: 0.84rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .Approved {
+      background-color: #15803d;
+      color: white;
+    }
+
+    .Pending {
+      background-color: #facc15;
+      color: #1e293b;
+    }
+
+    .Rejected {
+      background-color: #dc2626;
+      color: white;
+    }
+
+    button {
+      margin-right: 0.3rem;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.78rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    .approve-btn {
+      background-color: #22c55e;
+      color: white;
+    }
+
+    .approve-btn:hover {
+      background-color: #16a34a;
+    }
+
+    .reject-btn {
+      background-color: #ef4444;
+      color: white;
+    }
+
+    .reject-btn:hover {
+      background-color: #dc2626;
+    }
+
+    .view-btn {
+      background-color: #3b82f6;
+      color: white;
+    }
+
+    .view-btn:hover {
+      background-color: #2563eb;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #16a34a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      display: none;
+      z-index: 9999;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .detail-card {
+      max-width: 600px;
+      background-color: #1e293b;
+      border-radius: 12px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      box-shadow: 0 0 12px rgba(0,0,0,0.4);
+      display: none;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .detail-card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .detail-card p {
+      margin: 0.4rem 0;
+      font-size: 0.9rem;
+    }
+
+    .detail-card img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      margin-top: 1rem;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      th {
+        display: none;
+      }
+
+      td {
+        padding: 0.6rem;
+        border-bottom: 1px solid #334155;
+      }
+
+      td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        display: block;
+        color: #94a3b8;
+        margin-bottom: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- ========================= -->
+<!-- ✦ Welcome Box with Icon ✦ -->
+<!-- ========================= -->
+
+<div class="container welcome-box">
+  <div class="welcome-content">
+    <svg class="welcome-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#3b82f6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="welcome-text">
+      <h2>Welcome Admin</h2>
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    flex: 1;
+    background-color: #0f172a;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    color: #e2e8f0;
+    width: 100%;
+    max-width: 1000px;
+    height: 120px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .welcome-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .welcome-icon {
+    width: 40px;
+    height: 40px;
+    stroke-width: 2.2;
+    flex-shrink: 0;
+  }
+
+  .welcome-text h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #3b82f6;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 16px;
+      height: auto;
+    }
+
+    .welcome-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .welcome-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .welcome-text h2 {
+      font-size: 16px;
+    }
+  }
+</style>
+  <h1>Admin Panel - KYC Verification</h1>
+  <div class="toast" id="toast">✅ Status updated</div>
+  <div id="detailCard" class="detail-card"></div>
+
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      updateDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const userTable = document.querySelector("#userTable tbody");
+    const toast = document.getElementById("toast");
+    const detailCard = document.getElementById("detailCard");
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.style.display = "block";
+      setTimeout(() => toast.style.display = "none", 3000);
+    }
+
+    async function loadUsers() {
+      const snapshot = await getDocs(collection(db, "users"));
+      userTable.innerHTML = "";
+
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const id = docSnap.id;
+        const row = document.createElement("tr");
+
+        const fullName = `${data.firstName || ""} ${data.lastName || ""}`;
+        const email = data.email || "N/A";
+        const status = data.kycStatus || "Not Submitted";
+
+        row.innerHTML = `
+          <td data-label="Full Name">${fullName}</td>
+          <td data-label="Email">${email}</td>
+          <td data-label="Status"><span class="status ${status}">${status}</span></td>
+          <td data-label="Action">
+            <button class="view-btn" onclick="viewDetails('${id}')">View</button>
+            <button class="approve-btn" ${status === 'Approved' ? 'disabled' : ''} onclick="approveUser('${id}')">Approve</button>
+            <button class="reject-btn" ${status === 'Rejected' ? 'disabled' : ''} onclick="rejectUser('${id}')">Reject</button>
+          </td>
+        `;
+        userTable.appendChild(row);
+      });
+    }
+
+    window.approveUser = async (uid) => {
+      await updateDoc(doc(db, "users", uid), { kycStatus: "Approved" });
+      showToast("User approved");
+      loadUsers();
+    };
+
+    window.rejectUser = async (uid) => {
+      await updateDoc(doc(db, "users", uid), { kycStatus: "Rejected" });
+      showToast("User rejected");
+      loadUsers();
+    };
+
+    window.viewDetails = async (uid) => {
+      const docSnap = await getDocs(collection(db, "users"));
+      let selected;
+      docSnap.forEach(user => {
+        if (user.id === uid) selected = user.data();
+      });
+
+      if (!selected) return;
+
+      const kycIsPDF = selected.kycUrl && selected.kycUrl.endsWith(".pdf");
+
+      detailCard.innerHTML = `
+        <h2>${selected.firstName || ""} ${selected.lastName || ""}</h2>
+        <p><strong>Email:</strong> ${selected.email || "-"}</p>
+        <p><strong>Phone:</strong> ${selected.phone || "-"}</p>
+        <p><strong>Country:</strong> ${selected.country || "-"}</p>
+        <p><strong>Zip Code:</strong> ${selected.zip || "-"}</p>
+        <p><strong>Gender:</strong> ${selected.gender || "-"}</p>
+        <p><strong>KYC Status:</strong> <span class="status ${selected.kycStatus}">${selected.kycStatus}</span></p>
+        ${
+          selected.kycUrl
+            ? (kycIsPDF
+              ? `<p><a href="${selected.kycUrl}" target="_blank">View PDF Document</a></p>`
+              : `<img src="${selected.kycUrl}" alt="KYC Document" />`)
+            : `<p>No document uploaded</p>`
+        }
+      `;
+      detailCard.style.display = "block";
+      window.scrollTo({ top: detailCard.offsetTop - 40, behavior: "smooth" });
+    };
+
+    loadUsers();
+  </script>
+</body>
+</html>

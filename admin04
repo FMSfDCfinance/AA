@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin – All Users</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f1f3f5;
+      color: #f1f5f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #3b82f6;
+      margin-bottom: 20px;
+    }
+
+    .search-bar {
+      max-width: 400px;
+      margin: 0 auto 20px auto;
+      display: flex;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 10px 12px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      background-color: #1e293b;
+      color: #f1f5f9;
+      box-shadow: inset 0 0 0 1px #334155;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background-color: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #334155;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #334155;
+      color: #93c5fd;
+    }
+
+    tr:hover {
+      background-color: #0f172a;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      tr {
+        margin-bottom: 12px;
+      }
+
+      td {
+        padding: 10px;
+        border-bottom: none;
+      }
+
+      td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        color: #94a3b8;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- ========================= -->
+<!-- ✦ Welcome Box with Icon ✦ -->
+<!-- ========================= -->
+
+<div class="container welcome-box">
+  <div class="welcome-content">
+    <svg class="welcome-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#3b82f6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="welcome-text">
+      <h2>Welcome Admin</h2>
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    flex: 1;
+    background-color: #0f172a;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    color: #e2e8f0;
+    width: 100%;
+    max-width: 1000px;
+    height: 120px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .welcome-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .welcome-icon {
+    width: 40px;
+    height: 40px;
+    stroke-width: 2.2;
+    flex-shrink: 0;
+  }
+
+  .welcome-text h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #3b82f6;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 16px;
+      height: auto;
+    }
+
+    .welcome-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .welcome-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .welcome-text h2 {
+      font-size: 16px;
+    }
+  }
+</style>
+  <h2>All Users</h2>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search by UID or email..." oninput="filterUsers()" />
+  </div>
+
+  <div class="loading" id="loadingMessage">Loading users...</div>
+
+  <table id="usersTable" style="display: none;">
+    <thead>
+      <tr>
+        <th>UID</th>
+        <th>Email</th>
+        <th>Total Balance</th>
+      </tr>
+    </thead>
+    <tbody id="usersBody"></tbody>
+  </table>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const usersTable = document.getElementById('usersTable');
+    const usersBody = document.getElementById('usersBody');
+    const loadingMessage = document.getElementById('loadingMessage');
+    let allUsers = [];
+
+    async function loadUsers() {
+      try {
+        const snapshot = await db.collection("users").get();
+        allUsers = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            uid: doc.id,
+            email: data.email || 'N/A',
+            balance: typeof data.balance === "number" ? data.balance.toFixed(2) : "0.00"
+          };
+        });
+
+        renderUsers(allUsers);
+      } catch (err) {
+        loadingMessage.textContent = "Failed to load users: " + err.message;
+      }
+    }
+
+    function renderUsers(users) {
+      usersBody.innerHTML = '';
+      if (users.length === 0) {
+        loadingMessage.textContent = "No users found.";
+        return;
+      }
+
+      loadingMessage.style.display = 'none';
+      usersTable.style.display = '';
+
+      users.forEach(user => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td data-label="UID">${user.uid}</td>
+          <td data-label="Email">${user.email}</td>
+          <td data-label="Balance">£${user.balance}</td>
+        `;
+
+        usersBody.appendChild(row);
+      });
+    }
+
+    function filterUsers() {
+      const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+      const filtered = allUsers.filter(user =>
+        user.uid.toLowerCase().includes(keyword) ||
+        user.email.toLowerCase().includes(keyword)
+      );
+      renderUsers(filtered);
+    }
+
+    loadUsers();
+  </script>
+</body>
+</html>

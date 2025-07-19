@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crypto Payment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+      color: #1e293b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    .payment-card {
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      max-width: 540px;
+      width: 100%;
+      position: relative;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+    .crypto-logo {
+      width: 40px;
+      height: 40px;
+      margin-right: 0.75rem;
+    }
+    .crypto-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+    .serial {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .message {
+      font-size: 0.95rem;
+      background: #e0f2fe;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      color: #0369a1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .message svg {
+      width: 18px;
+      height: 18px;
+    }
+    .qr-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .qr-container img {
+      width: 120px;
+      height: 120px;
+      border-radius: 0.5rem;
+    }
+    .amount {
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .wallet-address {
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: #475569;
+      word-break: break-word;
+      display: flex;
+      align-items: center;
+    }
+    .wallet-address svg {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+    }
+    .info-box {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f1f5f9;
+      border-radius: 0.75rem;
+    }
+    .info-box div {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .tips {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    .tips ol {
+      padding-left: 1.2rem;
+    }
+    .tips a {
+      color: #0ea5e9;
+      text-decoration: none;
+    }
+    .copy-btn {
+      background: none;
+      border: none;
+      color: #0ea5e9;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding-left: 0.5rem;
+    }
+    #copy-toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #22c55e;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      display: none;
+      z-index: 1000;
+    }
+    .icon {
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-card">
+    <div class="serial" id="serial-number">No.: #00000</div>
+
+    <div class="header">
+      <img id="crypto-logo" class="crypto-logo" alt="Crypto Logo">
+      <span class="crypto-name" id="crypto-name">Crypto Name</span>
+    </div>
+
+    <div class="message">
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Send exactly <strong id="amount-display">0</strong> <span id="currency-name">Currency</span> to the wallet below.
+    </div>
+
+    <div class="qr-container">
+      <img id="qr-code" src="" alt="QR Code">
+      <div>
+        <div class="amount" id="amount"></div>
+        <div class="wallet-address" id="wallet-address">
+          <svg fill="currentColor" viewBox="0 0 20 20"><path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v6h-2V5H4v10h6v2H4a2 2 0 01-2-2V5z"/><path d="M14 12l-2 2h5v-2h-3z"/></svg>
+          <span id="wallet-text">...</span>
+          <button class="copy-btn" onclick="copyAddress()">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div>
+        <div style="color: #8b5cf6; font-weight: 600;">
+          <svg class="icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Expiration
+        </div>
+        <div id="expiration">Loading...</div>
+      </div>
+      <div>
+        <div style="color: #10b981; font-weight: 600;">
+          <svg class="icon" fill="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+          Confirmations
+        </div>
+        <div id="confirmation-count">0 / 19</div>
+      </div>
+    </div>
+
+    <div class="tips">
+      <strong>Tips</strong>
+      <ol>
+        <li>Supports <span id="network-name">Network</span> only.</li>
+        <li>Address is unique. Do not reuse it.</li>
+        <li>Send at least <strong id="min-amount-display">10</strong> to avoid fees.</li>
+        <li>Confirmations may take a few minutes.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div id="copy-toast">Address copied to clipboard!</div>
+
+  <script>
+    const logos = {
+      usdt: 'https://img.icons8.com/?size=100&id=DEDR1BLPBScO&format=png&color=000000?v=026',
+      usdc: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=026',
+      btc: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?v=026',
+      eth: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?v=026'
+    };
+    const addresses = {
+      usdt_trc20: "TF9kQdJq3S992xaQ6ghYCRNK7A1H7ZifKs",
+      btc_bitcoin: "bc1qpl3qh9e62lppyhp7kjq0c05ngdgzyutjrfyhye",
+      eth_ethereum: "0x58dA1a9D3e92298e45241C2E6dF68f4BC3Be4B81",
+      bnb_bep20: "0x58dA1a9D3e92298e45241C2E6dF68f4BC3Be4B81"
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const currency = params.get('currency') || 'usdt';
+    const network = params.get('network') || 'trc20';
+    const rawAmount = parseFloat(params.get('amount') || '1000');
+    const formattedAmount = rawAmount.toLocaleString(undefined, { minimumFractionDigits: 2 });
+
+    const key = `${currency}_${network}`;
+    const address = addresses[key] || "Unavailable";
+    const logo = logos[currency] || '';
+    const currencyLabel = currency.toUpperCase();
+
+    const serialKey = `serial_${currency}_${network}`;
+    let serial = localStorage.getItem(serialKey);
+    if (!serial) {
+      serial = String(Math.floor(Math.random() * 99999)).padStart(5, '0');
+      localStorage.setItem(serialKey, serial);
+    }
+
+    document.getElementById('serial-number').textContent = `No.: #${serial}`;
+    document.getElementById('crypto-logo').src = logo;
+    document.getElementById('crypto-name').textContent = `${currencyLabel} (${network.toUpperCase()})`;
+    document.getElementById('amount-display').textContent = formattedAmount;
+    document.getElementById('currency-name').textContent = currencyLabel;
+    document.getElementById('wallet-text').textContent = address;
+    document.getElementById('amount').innerHTML = `
+      <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 1l2 2h6v14H2V3h6l2-2z"/>
+      </svg>
+      ${formattedAmount}
+    `;
+    document.getElementById('qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${address}`;
+    document.getElementById('network-name').textContent = `${currencyLabel}-${network.toUpperCase()}`;
+    document.getElementById('min-amount-display').textContent = `${formattedAmount} ${currencyLabel}`;
+
+    function copyAddress() {
+      navigator.clipboard.writeText(address).then(() => {
+        const toast = document.getElementById('copy-toast');
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2000);
+      });
+    }
+
+    const EXP_KEY = `exp_${currency}_${network}`;
+    let expiration = localStorage.getItem(EXP_KEY);
+    if (!expiration) {
+      expiration = Date.now() + 7 * 24 * 60 * 60 * 1000;
+      localStorage.setItem(EXP_KEY, expiration);
+    }
+    expiration = parseInt(expiration);
+
+    function updateExpiration() {
+      const now = Date.now();
+      const diff = expiration - now;
+      if (diff <= 0) {
+        document.getElementById('expiration').textContent = "Expired";
+        clearInterval(expInterval);
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hrs = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const min = Math.floor((diff / (1000 * 60)) % 60);
+      const sec = Math.floor((diff / 1000) % 60);
+      document.getElementById('expiration').textContent = `${days}d ${String(hrs).padStart(2, '0')}:${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+    const expInterval = setInterval(updateExpiration, 1000);
+    updateExpiration();
+
+    const CONFIRM_KEY = `confirm_${currency}_${network}`;
+    let confirmations = parseInt(localStorage.getItem(CONFIRM_KEY)) || 0;
+    const maxConfirms = 19;
+
+    function updateConfirmations() {
+      if (confirmations < maxConfirms) {
+        confirmations++;
+        document.getElementById('confirmation-count').textContent = `${confirmations} / ${maxConfirms}`;
+        localStorage.setItem(CONFIRM_KEY, confirmations);
+      } else {
+        clearInterval(confirmInterval);
+      }
+    }
+    document.getElementById('confirmation-count').textContent = `${confirmations} / ${maxConfirms}`;
+    const confirmInterval = setInterval(updateConfirmations, 10000); // every 10 seconds
+  </script>
+</body>
+</html>

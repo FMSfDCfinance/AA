@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f1f3f5;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .logo {
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+
+    .logo img {
+      height: 60px;
+      max-width: 180px;
+      object-fit: contain;
+    }
+
+    .card {
+      background-color: #111827;
+      padding: 3rem 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.8s ease;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.95rem;
+      margin: 1rem 0 0.4rem;
+    }
+
+    .input-icon-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .input-icon-wrapper svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+      pointer-events: none;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.7rem 0.7rem 0.7rem 2.8rem;
+      border-radius: 0.4rem;
+      border: none;
+      background-color: #1f2937;
+      color: white;
+      font-size: 0.95rem;
+    }
+
+    input::placeholder {
+      color: #a1a1aa;
+    }
+
+    input:focus {
+      outline: none;
+      background-color: #374151;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      margin-top: 1.2rem;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 0.5rem;
+      transform: scale(1.1);
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 1.5rem;
+      background-color: #2563eb;
+      border: none;
+      border-radius: 0.4rem;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button.loading::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      border: 2px solid white;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      transform: translateY(-50%);
+    }
+
+    button:hover {
+      background-color: #1e40af;
+    }
+
+    .error-message {
+      margin-top: 1rem;
+      color: #f87171;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .success-message {
+      margin-top: 1rem;
+      color: #4ade80;
+      text-align: center;
+      font-size: 0.9rem;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .shake {
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+
+    @keyframes spin {
+      0% { transform: translateY(-50%) rotate(0deg); }
+      100% { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 2rem 1.5rem;
+        border-radius: 1rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      input {
+        font-size: 0.9rem;
+      }
+
+      .input-icon-wrapper svg {
+        width: 18px;
+        height: 18px;
+        left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="loginCard">
+    <div class="logo">
+      <img src="afo.png" alt="Stoctmartket Logo" />
+    </div>
+
+    <h2>Admin login</h2>
+
+    <label for="email">Email</label>
+    <div class="input-icon-wrapper">
+      <svg viewBox="0 0 24 24"><path d="M2 5.5C2 4.67 2.67 4 3.5 4h17c.83 0 1.5.67 1.5 1.5v13c0 .83-.67 1.5-1.5 1.5h-17c-.83 0-1.5-.67-1.5-1.5v-13zM4 6l8 6 8-6v-.5l-8 6-8-6V6zm16 12v-9l-7.5 5.6a.75.75 0 01-.92 0L4 9v9h16z"/></svg>
+      <input type="email" id="email" placeholder="Email" autocomplete="email" required />
+    </div>
+
+    <label for="password">Password</label>
+    <div class="input-icon-wrapper">
+      <svg viewBox="0 0 24 24"><path d="M17 8h-1V6a4 4 0 00-8 0v2H7a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2v-8a2 2 0 00-2-2zm-6 0V6a2 2 0 114 0v2h-4z"/></svg>
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password" required />
+    </div>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="remember" />
+      <label for="remember">Remember me</label>
+    </div>
+
+    <button type="submit" id="loginBtn">Login</button>
+
+    <div class="error-message" id="errorMessage"></div>
+    <div class="success-message" id="successMessage"></div>
+  </div>
+
+  <!-- Firebase Auth Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+    
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const loginBtn = document.getElementById('loginBtn');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const card = document.getElementById('loginCard');
+
+    const MAX_ATTEMPTS = 5;
+
+    const getAttempts = (email) => {
+      const attempts = localStorage.getItem(`attempts_${email}`) || 0;
+      return parseInt(attempts);
+    };
+
+    const incrementAttempts = (email) => {
+      let attempts = getAttempts(email) + 1;
+      localStorage.setItem(`attempts_${email}`, attempts);
+      return attempts;
+    };
+
+    const errorMap = {
+      "auth/invalid-email": "Please enter a valid email address.",
+      "auth/user-disabled": "This account has been disabled. Contact support.",
+      "auth/user-not-found": "No account found with this email.",
+      "auth/wrong-password": "Incorrect password. Please try again.",
+      "auth/too-many-requests": "Too many attempts. Please wait and try again.",
+    };
+
+    loginBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+
+      errorMessage.textContent = '';
+      successMessage.textContent = '';
+      card.classList.remove('shake');
+
+      if (getAttempts(email) >= MAX_ATTEMPTS) {
+        errorMessage.textContent = "Contact customer service. Your account has been suspended.";
+        return;
+      }
+
+      loginBtn.classList.add('loading');
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        localStorage.removeItem(`attempts_${email}`);
+        successMessage.textContent = "Login successful. Redirecting...";
+        setTimeout(() => {
+          window.location.href = "/agbo";
+        }, 1500);
+      } catch (error) {
+        const friendlyMessage = errorMap[error.code] || "Login failed. Please try again.";
+        const attempts = incrementAttempts(email);
+
+        if (attempts >= MAX_ATTEMPTS) {
+          errorMessage.textContent = "Contact customer service. Your account has been suspended.";
+        } else {
+          errorMessage.textContent = friendlyMessage;
+        }
+
+        card.classList.add('shake');
+      } finally {
+        loginBtn.classList.remove('loading');
+      }
+    });
+  </script>
+</body>
+</html>

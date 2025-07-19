@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stoctmartket</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+    }
+
+    .header {
+      padding: 10px 15px 0 15px;
+      background-color: #fff;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .logo .golden {
+      color: #f5b400;
+    }
+
+    .logo .fx {
+      color: #007bff;
+    }
+
+    .logo .options {
+      color: red;
+    }
+
+    .nav {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .nav a {
+      color: #007bff;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    .nav select {
+      font-size: 14px;
+      color: #007bff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 2px 4px;
+    }
+
+    .fixed-ticker {
+      position: fixed;
+      top: 70px;
+      width: 100%;
+      z-index: 999;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .registration-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 160px 15px 60px 15px;
+      background-color: #fff;
+    }
+
+    .registration-box {
+      width: 320px;
+    }
+
+    .registration-box h2 {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .registration-box input,
+    .registration-box select {
+      width: 100%;
+      height: 42px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding-left: 10px;
+      font-size: 15px;
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      font-size: 14px;
+      color: #333;
+      line-height: 1.4;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+      margin-top: 2px;
+      margin-right: 10px;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper label {
+      margin: 0;
+    }
+
+    .checkbox-wrapper a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .checkbox-wrapper a:hover {
+      text-decoration: underline;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      height: 42px;
+      background-color: #00b33c;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .registration-section {
+        padding-top: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+<section id="page-preloader">
+	<div class="theme-loader">Stoctmartket</div>
+</section>
+
+<style>
+	#page-preloader {
+		background: #ffffff;
+		position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 999999;
+		transition: opacity 0.5s ease, visibility 0.5s ease;
+	}
+
+	#page-preloader.hide {
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	.theme-loader {
+		text-transform: uppercase;
+		font-weight: 700;
+		font-size: 18px;
+		color: #007bff;
+		letter-spacing: 0.2em;
+		text-align: center;
+		width: 244px;
+		height: 49px;
+		line-height: 49px;
+		position: absolute;
+		left: 50%;
+		top: 45%;
+		transform: translate(-50%, -50%);
+		-o-transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		-webkit-transform: translate(-50%, -50%);
+		-moz-transform: translate(-50%, -50%);
+	}
+
+	.theme-loader::before, .theme-loader::after {
+		content: "";
+		display: block;
+		width: 15px;
+		height: 15px;
+		background: #007bff;
+		position: absolute;
+		animation: cssload-load 0.91s infinite alternate ease-in-out;
+		-o-animation: cssload-load 0.91s infinite alternate ease-in-out;
+		-ms-animation: cssload-load 0.91s infinite alternate ease-in-out;
+		-webkit-animation: cssload-load 0.91s infinite alternate ease-in-out;
+		-moz-animation: cssload-load 0.91s infinite alternate ease-in-out;
+	}
+
+	.theme-loader::before {
+		top: 0;
+	}
+
+	.theme-loader::after {
+		bottom: 0;
+	}
+
+	@keyframes cssload-load {
+		0% {
+			left: 0;
+			height: 29px;
+			width: 15px;
+		}
+		50% {
+			height: 8px;
+			width: 39px;
+		}
+		100% {
+			left: 229px;
+			height: 29px;
+			width: 15px;
+		}
+	}
+
+	@-o-keyframes cssload-load {
+		0% {
+			left: 0;
+			height: 29px;
+			width: 15px;
+		}
+		50% {
+			height: 8px;
+			width: 39px;
+		}
+		100% {
+			left: 229px;
+			height: 29px;
+			width: 15px;
+		}
+	}
+
+	@-ms-keyframes cssload-load {
+		0% {
+			left: 0;
+			height: 29px;
+			width: 15px;
+		}
+		50% {
+			height: 8px;
+			width: 39px;
+		}
+		100% {
+			left: 229px;
+			height: 29px;
+			width: 15px;
+		}
+	}
+
+	@-webkit-keyframes cssload-load {
+		0% {
+			left: 0;
+			height: 29px;
+			width: 15px;
+		}
+		50% {
+			height: 8px;
+			width: 39px;
+		}
+		100% {
+			left: 229px;
+			height: 29px;
+			width: 15px;
+		}
+	}
+
+	@-moz-keyframes cssload-load {
+		0% {
+			left: 0;
+			height: 29px;
+			width: 15px;
+		}
+		50% {
+			height: 8px;
+			width: 39px;
+		}
+		100% {
+			left: 229px;
+			height: 29px;
+			width: 15px;
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		setTimeout(function () {
+			const preloader = document.getElementById('page-preloader');
+			preloader.classList.add('hide');
+		}, 3000); // 3 seconds
+	});
+</script>
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <span class="golden">Stoct</span><span class="fx">mart</span><span class="options">ket</span>
+    </div>
+    <div class="nav">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+      <a href="#">Language</a>
+      <select>
+        <option value="">▼</option>
+      </select>
+    </div>
+  </div>
+<!-- Fixed Ticker (White Version) -->
+<div class="fixed-ticker" style="position: relative;">
+  <div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js">
+    {
+      "symbols": [
+        { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
+        { "proName": "FOREXCOM:NSXUSD", "title": "US 100" },
+        { "proName": "FX_IDC:EURUSD", "title": "EUR/USD" },
+        { "proName": "BITSTAMP:BTCUSD", "title": "Bitcoin" },
+        { "proName": "BITSTAMP:ETHUSD", "title": "Ethereum" }
+      ],
+      "showSymbolLogo": true,
+      "colorTheme": "light",
+      "isTransparent": false,
+      "displayMode": "compact",
+      "locale": "en"
+    }
+    </script>
+  </div>
+
+  <!-- Overlay Div to Intercept Clicks -->
+  <div 
+    onclick="window.location.href='/login';" 
+    style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      cursor: pointer;
+      z-index: 999;
+    ">
+  </div>
+</div>
+
+
+  <!-- Registration Form -->
+  <section class="registration-section">
+    <form class="registration-box">
+      <h2>Create an Account!</h2>
+
+      <input type="text" id="firstName" placeholder="First Name" required>
+      <input type="text" id="lastName" placeholder="Last Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="phone" placeholder="Phone number" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <input type="password" id="confirmPassword" placeholder="Repeat Password" required>
+
+      <select id="currency" required>
+        <option value="" disabled selected>Select Currency</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+      </select>
+
+      <input type="text" id="homeAddress" placeholder="Home Address" required>
+
+      <select id="countryDropdown" required>
+        <option value="" disabled selected>Select Country</option>
+        <option value="United States">United States</option>
+        <option value="United Kingdom">United Kingdom</option>
+        <option value="Canada">Canada</option>
+        <option value="Australia">Australia</option>
+        <option value="Germany">Germany</option>
+        <option value="France">France</option>
+        <option value="South Africa">South Africa</option>
+        <option value="India">India</option>
+        <option value="China">China</option>
+        <option value="Japan">Japan</option>
+        <option value="Brazil">Brazil</option>
+        <option value="Mexico">Mexico</option>
+        <option value="Italy">Italy</option>
+        <option value="Russia">Russia</option>
+        <option value="Spain">Spain</option>
+      </select>
+
+      <div class="checkbox-wrapper">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">I agree to the <a href="#">Terms of Service</a>.</label>
+      </div>
+
+      <button type="submit">Register Account</button>
+    </form>
+  </section>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Config -->
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
+  <!-- Form Handler -->
+<script>
+  document.querySelector("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const currency = document.getElementById("currency").value;
+    const homeAddress = document.getElementById("homeAddress").value.trim();
+    const country = document.getElementById("countryDropdown").value;
+    const termsAccepted = document.getElementById("terms").checked;
+
+    if (!termsAccepted) {
+      alert("You must accept the Terms of Service.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+
+      await db.collection("users").doc(user.uid).set({
+        firstName,
+        lastName,
+        email,
+        phone,
+        currency,
+        homeAddress,
+        country,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      alert("Registration successful! Redirecting to dashboard...");
+      // ✅ Redirect after successful registration
+      window.location.href = "/dashboard"; // make sure this URL exists
+    } catch (error) {
+      alert("Registration failed: " + error.message);
+    }
+  });
+</script>
+
+  <!-- Footer -->
+  <footer style="background-color: #000000; color: #ccc; font-family: Arial, sans-serif; padding: 40px 20px;">
+    <div style="max-width: 800px; margin: auto; line-height: 1.8;">
+      <p style="font-size: 20px; color: white; font-weight: bold;">Stoctmartket</p>
+      <p>35 E 22nd, New York, NY 10165, USA</p>
+      <p><a href="mailto:support@Stoctmartket.com" style="color: #ccc;">support@Stoctmartket.com</a></p>
+
+      <br>
+
+      <p style="color: white; font-weight: bold;">About Us</p>
+      <p>Our Company</p>
+      <p>Forex</p>
+      <p>Commodities</p>
+      <p>Crypto</p>
+      <p>Contact Us</p>
+      <p>FAQs</p>
+
+      <br>
+
+      <p style="color: white; font-weight: bold;">Where to buy Bitcoin</p>
+      <p>Luno</p>
+      <p>LocalBitcoin</p>
+      <p>Paxful</p>
+      <p>Coinbase</p>
+      <p>Remitano</p>
+
+      <br>
+
+      <p style="color: white; font-weight: bold;">Newsletter</p>
+      <p>Get latest updates and offers.</p>
+      <form style="margin-top: 10px; display: flex; max-width: 400px;">
+        <input type="email" placeholder="Enter your email" style="flex: 1; padding: 10px; border: none; border-radius: 4px 0 0 4px;">
+        <button type="submit" style="background-color: #2ecc71; border: none; padding: 30px 20px; border-radius: 0 6px 6px 0; color: white;"></button>
+      </form>
+
+      <br><br>
+
+      <p style="text-align: center; color: #888;">© Copyright Stoctmartket 2010 - 2021. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Floating Icon -->
+  <a id="waIcon" href="#" target="_blank"
+     style="position:fixed;bottom:25px;left:20px;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,0.3);z-index:1000;">
+    <img src="https://img.icons8.com/color/48/whatsapp.png" style="width:32px;height:32px;">
+  </a>
+</body>
+</html>

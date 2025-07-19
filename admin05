@@ -1,0 +1,228 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KYC Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f3f5;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }header {
+  background: #0f172a;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.25rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.kyc-container {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.kyc-card {
+  background: #1e293b;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.kyc-card h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.kyc-info {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.kyc-images {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.kyc-images img {
+  width: 120px;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #334155;
+}
+
+.actions button {
+  margin-right: 1rem;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.approve {
+  background-color: #22c55e;
+  color: white;
+}
+
+.reject {
+  background-color: #ef4444;
+  color: white;
+}
+
+  </style>
+</head>
+<body>
+<!-- ========================= -->
+<!-- ✦ Welcome Box with Icon ✦ -->
+<!-- ========================= -->
+
+<div class="container welcome-box">
+  <div class="welcome-content">
+    <svg class="welcome-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#3b82f6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="welcome-text">
+      <h2>Welcome Admin</h2>
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    flex: 1;
+    background-color: #0f172a;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    color: #e2e8f0;
+    width: 100%;
+    max-width: 1000px;
+    height: 120px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .welcome-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .welcome-icon {
+    width: 40px;
+    height: 40px;
+    stroke-width: 2.2;
+    flex-shrink: 0;
+  }
+
+  .welcome-text h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #3b82f6;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 16px;
+      height: auto;
+    }
+
+    .welcome-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .welcome-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .welcome-text h2 {
+      font-size: 16px;
+    }
+  }
+</style>
+  <header>
+    <i class="fas fa-id-card"></i> KYC Admin Dashboard
+  </header>  <div class="kyc-container" id="kyc-list">
+    Loading...
+  </div>  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collectionGroup, updateDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadKYC() {
+      const listEl = document.getElementById("kyc-list");
+      listEl.innerHTML = "";
+
+      const snapshot = await getDocs(collectionGroup(db, "kycData"));
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.status === "pending") {
+          const card = document.createElement("div");
+          card.className = "kyc-card";
+          card.innerHTML = `
+            <h3>${data.firstName} ${data.lastName}</h3>
+            <div class="kyc-info">Email: ${data.email}</div>
+            <div class="kyc-info">Country: ${data.country} | Zip: ${data.zipCode}</div>
+            <div class="kyc-info">Gender: ${data.gender} | Address: ${data.address}</div>
+            <div class="kyc-info">Expiry: ${data.expiryDate || "-"}</div>
+            <div class="kyc-images">
+              <div>
+                <div style="font-size: 0.8rem; margin-bottom: 0.3rem;">ID</div>
+                <img src="${data.idUrl}" alt="ID">
+              </div>
+              <div>
+                <div style="font-size: 0.8rem; margin-bottom: 0.3rem;">Selfie</div>
+                <img src="${data.selfieUrl}" alt="Selfie">
+              </div>
+            </div>
+            <div class="actions">
+              <button class="approve" onclick="approveKYC('${docSnap.ref.path}')">Approve</button>
+              <button class="reject" onclick="rejectKYC('${docSnap.ref.path}')">Reject</button>
+            </div>
+          `;
+          listEl.appendChild(card);
+        }
+      });
+    }
+
+    window.approveKYC = async (docPath) => {
+      await updateDoc(doc(db, docPath), { status: "approved" });
+      alert("KYC Approved");
+      loadKYC();
+    };
+
+    window.rejectKYC = async (docPath) => {
+      await updateDoc(doc(db, docPath), { status: "rejected" });
+      alert("KYC Rejected");
+      loadKYC();
+    };
+
+    loadKYC();
+  </script></body>
+</html>

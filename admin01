@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Inter", sans-serif;
+    background-color: #1e293b; /* Match sidebar background */
+    color: #f1f3f5;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .main-layout {
+    display: flex;
+    gap: 20px;
+  }
+
+  .sidebar {
+    width: 220px;
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+    border: 1px solid #334155;
+  }
+
+  .sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #3b82f6;
+    font-size: 18px;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar ul li {
+    margin-bottom: 12px;
+  }
+
+  .sidebar ul li a {
+    color: #f1f5f9;
+    text-decoration: none;
+    font-size: 15px;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+
+  .sidebar ul li a:hover {
+    background-color: #3b82f6;
+  }
+
+  .container {
+    flex: 1;
+    background: #0f172a; /* Darker panel */
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 30px;
+    color: #f8fafc;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  h2,
+  h3 {
+    text-align: center;
+    color: #3b82f6;
+    margin-bottom: 16px;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px 14px;
+    margin: 10px 0;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-size: 15px;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    background-color: #0f172a;
+    border-color: #3b82f6;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #2563eb;
+  }
+
+  .transaction-log {
+    margin-top: 20px;
+    background-color: #1e293b;
+    padding: 14px;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    max-height: 240px;
+    overflow-y: auto;
+    font-size: 14px;
+    color: #f1f5f9;
+  }
+
+  .withdrawal-entry {
+    border: 1px solid #334155;
+    background-color: #0f172a;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .withdrawal-entry span {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .withdrawal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .withdrawal-buttons button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .withdrawal-buttons .approve {
+    background-color: #22c55e;
+    color: white;
+  }
+
+  .withdrawal-buttons .decline {
+    background-color: #ef4444;
+    color: white;
+  }
+
+  #status {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #3b82f6;
+  }
+
+  .filter-select {
+    margin-top: 10px;
+  }
+
+  .note-field {
+    margin-top: 6px;
+  }
+
+  .export-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar .icon {
+  width: 18px;
+  height: 18px;
+}
+  @media (min-width: 501px) {
+    .withdrawal-buttons {
+      flex-direction: row;
+    }
+
+    .export-btns {
+      flex-direction: row;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .main-layout {
+      flex-direction: column;
+    }
+
+    .sidebar {
+      width: 100%;
+      position: static;
+    }
+
+    .container {
+      margin: 0;
+    }
+  }
+</style>
+  </head>
+  <body>
+<!-- ================================ -->
+<!-- ✦ Admin Welcome Box (Isolated) ✦ -->
+<!-- ================================ -->
+
+<div class="admin-welcome-box">
+  <div class="admin-welcome-content">
+    <svg class="admin-welcome-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24" stroke="#3b82f6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="admin-welcome-text">
+      <h2>Welcome Admin</h2>
+    </div>
+  </div>
+</div>
+
+<style>
+  .admin-welcome-box {
+    flex: 1;
+    background-color: #0f172a;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    color: #e2e8f0;
+    width: 100%;
+    max-width: 1000px;
+    height: 120px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .admin-welcome-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .admin-welcome-icon {
+    width: 40px;
+    height: 40px;
+    stroke-width: 2.2;
+    flex-shrink: 0;
+  }
+
+  .admin-welcome-text h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #3b82f6;
+  }
+
+  @media (max-width: 600px) {
+    .admin-welcome-box {
+      padding: 16px;
+      height: auto;
+    }
+
+    .admin-welcome-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .admin-welcome-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .admin-welcome-text h2 {
+      font-size: 16px;
+    }
+  }
+</style>
+<!-- Include Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<div class="main-layout">
+  <div class="sidebar">
+    <h3>Admin Menu</h3>
+    <ul>
+      <li>
+        <a href="admin01">
+          <i data-lucide="layout-dashboard" class="icon"></i>
+          Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="admin02">
+          <i data-lucide="credit-card" class="icon"></i>
+          Payment
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Activate Lucide Icons -->
+<script>
+  lucide.createIcons();
+</script>
+
+    <div class="container">
+      <!-- [ALL YOUR EXISTING CONTENT GOES HERE] -->
+    </div>
+  </div>
+</body>
+    <div class="container">
+
+    <h3>Withdraw Requests</h3>  
+
+    <select id="filterStatus" class="filter-select" onchange="filterWithdrawals()">  
+      <option value="all">Show All</option>  
+      <option value="pending">Pending</option>  
+      <option value="approved">Approved</option>  
+      <option value="declined">Declined</option>  
+    </select>  
+
+    <div class="export-btns">  
+      <button onclick="exportWithdrawals('csv')">Export CSV</button>  
+      <button onclick="exportWithdrawals('json')">Export JSON</button>  
+    </div>  
+
+    <div class="transaction-log" id="withdrawals">Loading...</div>  
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>  
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>  
+
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+    
+    firebase.initializeApp(firebaseConfig);  
+    const db = firebase.firestore();  
+    const withdrawalsDiv = document.getElementById("withdrawals");  
+    let allWithdrawals = [];  
+    
+    async function fetchWithdrawals() {  
+      try {  
+        const snapshot = await db.collectionGroup("withdrawals").orderBy("timestamp", "desc").get();  
+        allWithdrawals = snapshot.docs.map(doc => {  
+          const data = doc.data();  
+          data.id = doc.id;  
+          data.uid = doc.ref.parent.parent?.id || "Unknown";  
+          return data;  
+        });  
+        filterWithdrawals();  
+      } catch (error) {  
+        withdrawalsDiv.textContent = "Error loading withdrawals: " + error.message;  
+      }  
+    }  
+    
+    function filterWithdrawals() {  
+      const filter = document.getElementById("filterStatus").value;  
+      let filtered = allWithdrawals;  
+    
+      if (filter !== "all") {  
+        filtered = allWithdrawals.filter(wd => {  
+          const withdrawalStatus = wd.status?.toLowerCase?.() || "";  
+          return withdrawalStatus === filter;  
+        });  
+      }  
+    
+      renderWithdrawals(filtered);  
+    }  
+    
+    function renderWithdrawals(withdrawals) {  
+      withdrawalsDiv.innerHTML = "";  
+    
+      if (!Array.isArray(withdrawals) || withdrawals.length === 0) {  
+        withdrawalsDiv.innerHTML = "<em>No withdrawals found.</em>";  
+        return;  
+      }  
+    
+      withdrawals.forEach((wd) => {  
+        const dateStr = wd.timestamp?.toDate?.().toLocaleString?.() || "Unknown date";  
+        const amount = typeof wd.amount === "number" ? wd.amount : 0;  
+        const uid = wd.uid || "N/A";  
+        const withdrawalStatus = wd.status || "N/A";  
+        const note = wd.note || "-";  
+    
+        const div = document.createElement("div");  
+        div.className = "withdrawal-entry";  
+        div.innerHTML = `  
+          <span><strong>UID:</strong> ${uid}</span>  
+          <span><strong>Amount:</strong> £${amount.toFixed(2)}</span>  
+          <span><strong>Status:</strong> ${withdrawalStatus}</span>  
+          <span><strong>Date:</strong> ${dateStr}</span>  
+          <span><strong>Note:</strong> ${note}</span>  
+          <div class="withdrawal-buttons"></div>  
+        `;  
+    
+        const buttonsDiv = div.querySelector(".withdrawal-buttons");  
+    
+        if (withdrawalStatus.toLowerCase() === "pending") {  
+          const approveBtn = document.createElement("button");  
+          approveBtn.textContent = "Approve";  
+          approveBtn.className = "approve";  
+          approveBtn.onclick = () => updateWithdrawalStatus(uid, wd.id, "approved");  
+    
+          const declineBtn = document.createElement("button");  
+          declineBtn.textContent = "Decline";  
+          declineBtn.className = "decline";  
+          declineBtn.onclick = () => updateWithdrawalStatus(uid, wd.id, "declined");  
+    
+          buttonsDiv.appendChild(approveBtn);  
+          buttonsDiv.appendChild(declineBtn);  
+        }  
+    
+        withdrawalsDiv.appendChild(div);  
+      });  
+    }  
+    
+    async function updateWithdrawalStatus(uid, withdrawalId, statusUpdate) {  
+      try {  
+        const docRef = db.collection("users").doc(uid).collection("withdrawals").doc(withdrawalId);  
+        await docRef.update({ status: statusUpdate });  
+        await fetchWithdrawals();  
+      } catch (error) {  
+        withdrawalsDiv.textContent = "Error updating withdrawal: " + error.message;  
+      }  
+    }  
+    
+    function exportWithdrawals(format) {  
+      const data = allWithdrawals.map(wd => ({  
+        uid: wd.uid || "",  
+        amount: typeof wd.amount === "number" ? wd.amount.toFixed(2) : "",  
+        status: wd.status || "",  
+        note: wd.note || "",  
+        timestamp: wd.timestamp ? wd.timestamp.toDate().toISOString() : "",  
+      }));  
+    
+      if (format === "json") {  
+        const jsonStr = JSON.stringify(data, null, 2);  
+        downloadFile("withdrawals.json", "application/json", jsonStr);  
+      } else if (format === "csv") {  
+        const headers = ["uid", "amount", "status", "note", "timestamp"];  
+        const csvRows = [headers.join(",")];  
+        data.forEach(row => {  
+          const values = headers.map(h => `"${(row[h] || "").toString().replace(/"/g, '""')}"`);  
+          csvRows.push(values.join(","));  
+        });  
+        const csvStr = csvRows.join("\n");  
+        downloadFile("withdrawals.csv", "text/csv", csvStr);  
+      }  
+    }  
+    
+    function downloadFile(filename, mimeType, content) {  
+      const blob = new Blob([content], { type: mimeType });  
+      const url = URL.createObjectURL(blob);  
+      const a = document.createElement("a");  
+      a.href = url;  
+      a.download = filename;  
+      a.click();  
+      URL.revokeObjectURL(url);  
+    }  
+    
+    fetchWithdrawals();  
+  </script>
+</body>
+</html>

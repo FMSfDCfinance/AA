@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Silver Plan</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- Smartsupp Live Chat -->
+  <script>
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = '4202b683f9b10c1842c5f4abd61f0096c7bc0dee';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+  </script>
+
+<style>
+  :root {
+    --bg-light: #e5e7eb;
+    --bg-card: #f9fafb;
+    --bg-primary: #1e3a8a;
+    --bg-primary-hover: #1d4ed8;
+    --bg-success: #10b981;
+    --bg-error: #ef4444;
+    --bg-processing: #06b6d4;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --border: #d1d5db;
+    --radius: 12px;
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+  }
+
+  .breadcrumb {
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+
+  .card, .buy-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius);
+    margin: 1rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
+
+  .card:hover, .buy-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .card-header {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-body {
+    text-align: center;
+  }
+
+  .percentage {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--bg-primary);
+    margin: 1rem 0;
+  }
+
+  .info-text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 0.4rem 0;
+  }
+
+  .balance-display {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 1.25rem;
+    color: var(--text-main);
+  }
+
+  .go-back-btn {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--bg-primary);
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+  }
+
+  .go-back-btn:hover {
+    background-color: var(--bg-primary-hover);
+    box-shadow: 0 0 10px var(--bg-primary-hover);
+  }
+
+  .buy-header {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+  }
+
+  .input-group {
+    display: flex;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  input[type="number"] {
+    flex: 1;
+    border: none;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: var(--text-main);
+    background-color: #fff;
+    outline: none;
+  }
+
+  .currency {
+    background-color: #f1f5f9;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .pay-btn {
+    margin-top: 1.25rem;
+    width: 100%;
+    padding: 0.85rem;
+    background-color: var(--bg-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .pay-btn:hover {
+    background-color: var(--bg-primary-hover);
+    box-shadow: 0 0 10px var(--bg-primary-hover);
+  }
+
+  .status-message {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+    text-align: center;
+    display: none;
+  }
+
+  .status-success {
+    background-color: var(--bg-success);
+    color: white;
+  }
+
+  .status-error {
+    background-color: var(--bg-error);
+    color: white;
+  }
+
+  .status-processing {
+    background-color: var(--bg-processing);
+    color: white;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--radius);
+    max-width: 400px;
+    text-align: center;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .modal h2 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: var(--text-main);
+  }
+
+  .modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .modal button {
+    padding: 0.6rem 1.25rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .btn-cancel {
+    background: #f3f4f6;
+    color: var(--text-main);
+  }
+
+  .btn-cancel:hover {
+    background: #e5e7eb;
+  }
+
+  .btn-confirm {
+    background: var(--bg-primary);
+    color: white;
+  }
+
+  .btn-confirm:hover {
+    background: var(--bg-primary-hover);
+    box-shadow: 0 0 8px var(--bg-primary-hover);
+  }
+
+  @media (max-width: 480px) {
+    .card, .buy-card {
+      margin: 1rem 0.75rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="breadcrumb">Home / Invest</div>
+
+  <div class="card">
+    <div class="card-header">SILVER ACCOUNT</div>
+    <div class="card-body">
+      <div class="percentage">50%</div>
+      <div class="info-text">After 4 DAYS</div>
+      <div class="info-text">Minimum Amount: $5,000</div>
+      <div class="info-text">Maximum Amount: $15,000</div>
+      <div class="info-text">Instant Withdraw</div>
+      <div class="balance-display">Balance: $<span id="balance-amount">0.00</span></div>
+      <a href="Investment" class="go-back-btn"><i class="fas fa-paper-plane"></i> Go back</a>
+    </div>
+  </div>
+
+  <div class="buy-card">
+    <div class="buy-header">Buy In</div>
+    <div class="input-group">
+      <input type="number" id="invest-amount" placeholder="Enter Investment Amount" min="5000" max="15000" />
+      <div class="currency">$</div>
+    </div>
+    <button class="pay-btn" id="invest-btn">Pay Now <i class="fas fa-paper-plane"></i></button>
+    <div id="status-message" class="status-message"></div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h2 id="modal-message">Confirm your investment</h2>
+      <div class="modal-buttons">
+        <button class="btn-cancel" id="modal-cancel">Cancel</button>
+        <button class="btn-confirm" id="modal-confirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const investInput = document.getElementById('invest-amount');
+    const investButton = document.getElementById('invest-btn');
+    const statusMessage = document.getElementById('status-message');
+    const balanceAmount = document.getElementById('balance-amount');
+    let currentBalance = 0;
+
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalMessage = document.getElementById('modal-message');
+    const modalCancel = document.getElementById('modal-cancel');
+    const modalConfirm = document.getElementById('modal-confirm');
+    let pendingAmount = 0;
+
+    function showStatus(message, type = "processing") {
+      statusMessage.textContent = message;
+      statusMessage.className = `status-message status-${type}`;
+      statusMessage.style.display = "block";
+    }
+
+    function hideStatus(delay = 3000) {
+      setTimeout(() => {
+        statusMessage.style.display = "none";
+      }, delay);
+    }
+
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const doc = await db.collection("users").doc(user.uid).get();
+        if (doc.exists) {
+          currentBalance = doc.data().balance || 0;
+          balanceAmount.textContent = currentBalance.toFixed(2);
+        }
+      } else {
+        showStatus("User not signed in.", "error");
+      }
+    });
+
+    investButton.addEventListener('click', () => {
+      const amount = parseFloat(investInput.value);
+      if (isNaN(amount) || amount < 5000 || amount > 15000) {
+        showStatus("Enter a valid amount between $5,000 and $15,000.", "error");
+        hideStatus();
+        return;
+      }
+      if (amount > currentBalance) {
+        showStatus("Insufficient balance.", "error");
+        hideStatus();
+        return;
+      }
+
+      pendingAmount = amount;
+      modalMessage.textContent = `Are you sure you want to invest $${amount.toFixed(2)} in the Silver Plan?`;
+      modalOverlay.style.display = "flex";
+    });
+
+    modalCancel.addEventListener('click', () => {
+      modalOverlay.style.display = "none";
+    });
+
+    modalConfirm.addEventListener('click', async () => {
+      modalOverlay.style.display = "none";
+      showStatus("Processing investment...", "processing");
+
+      try {
+        const user = auth.currentUser;
+        if (!user) throw new Error("User not authenticated.");
+
+        const userRef = db.collection("users").doc(user.uid);
+        const newBalance = currentBalance - pendingAmount;
+
+        await userRef.update({ balance: newBalance });
+
+        await db.collection("investments").add({
+          email: user.email.toLowerCase(),
+          amount: pendingAmount,
+          plan: "silver",
+          expectedReturn: pendingAmount * 1.5,
+          timestamp: firebase.firestore.Timestamp.now(),
+          status: "pending"
+        });
+
+        currentBalance = newBalance;
+        balanceAmount.textContent = newBalance.toFixed(2);
+        investInput.value = "";
+
+        showStatus(`Success! You’ve invested $${pendingAmount.toFixed(2)}.`, "success");
+        hideStatus(4000);
+      } catch (err) {
+        console.error(err);
+        showStatus("Failed to invest. Try again.", "error");
+        hideStatus();
+      }
+    });
+  </script>
+
+</body>
+</html>

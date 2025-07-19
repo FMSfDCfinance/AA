@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Investment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    padding-top: 3rem;
+  }
+
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 900px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    z-index: 1000;
+  }
+
+  .back-button {
+    background-color: #e9ecef;
+    color: #212529;
+    border: none;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .back-button:hover {
+    background-color: #dee2e6;
+  }
+
+  .breadcrumb {
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+    width: 100%;
+    max-width: 900px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  .card-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 900px;
+    padding: 0 1rem 2rem;
+    box-sizing: border-box;
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    box-sizing: border-box;
+    gap: 1.5rem;
+  }
+
+  .white-card {
+    background: #ffffff;
+    border-radius: 12px;
+    width: 100%;
+    height: 500px;
+    color: #212529;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .tradingview-widget-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+
+  .tradingview-widget-copyright {
+    font-size: 10px;
+    text-align: center;
+    margin-top: 0.25rem;
+    color: #aaa;
+  }
+
+  .trade-card {
+    background: #f1f3f5;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+
+  .trade-box {
+    background: #ffffff;
+    flex: 1;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    border: 1px solid #dee2e6;
+  }
+
+  .trade-box select,
+  .trade-box input {
+    background: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 0.6rem;
+    border-radius: 6px;
+    color: #212529;
+    font-size: 1rem;
+  }
+
+  .trade-box input::placeholder {
+    color: #6c757d;
+  }
+
+  .trade-box label {
+    font-size: 0.9rem;
+    color: #495057;
+  }
+
+  .trade-button {
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .buy-button {
+    background-color: #10b981;
+    color: white;
+    box-shadow: 0 0 10px #10b98155;
+  }
+
+  .sell-button {
+    background-color: #ef4444;
+    color: white;
+    box-shadow: 0 0 10px #ef444455;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal-content {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #212529;
+  }
+
+  .modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .modal-button {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .deposit-button {
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1.2;
+    user-select: none;
+  }
+
+  .deposit-button:hover {
+    background-color: #3EB489;
+  }
+
+  .cancel-button {
+    background-color: #dee2e6;
+    color: #212529;
+    box-shadow: 0 0 10px #ccc;
+  }
+
+  .cancel-button:hover {
+    background-color: #ced4da;
+  }
+
+  @media (max-width: 480px) {
+    header {
+      padding: 0.5rem 0.75rem;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb {
+      padding: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .card {
+      border-radius: 10px;
+      padding: 0.75rem;
+    }
+
+    .white-card,
+    .trade-card {
+      border-radius: 10px;
+    }
+
+    .trade-card {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <a href="javascript:history.back()" class="back-button">← Back</a>
+  </header>
+
+  <div class="breadcrumb">
+    Home / Invest
+  </div>
+
+  <div class="card-container">
+    <div class="card">
+<!-- Ticker Tape Widget -->
+<div class="tradingview-widget-container" style="padding:0 !important;">
+  <div class="tradingview-widget-container__widget"></div>
+  <div class="tradingview-widget-copyright">
+    <a href="https://www.tradingview.com/markets/" rel="noopener" target="_blank">
+      <span class="blue-text">Markets</span>
+    </a> by Aurumtxoptions
+  </div>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js">
+  {
+    "symbols": [
+      { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
+      { "proName": "FOREXCOM:NSXUSD", "title": "US 100" },
+      { "proName": "FX_IDC:EURUSD", "title": "EUR/USD" },
+      { "proName": "BITSTAMP:BTCUSD", "title": "Bitcoin" },
+      { "proName": "BITSTAMP:ETHUSD", "title": "Ethereum" }
+    ],
+    "showSymbolLogo": true,
+    "colorTheme": "light",  <!-- Changed here -->
+    "isTransparent": false,
+    "displayMode": "compact",
+    "locale": "en"
+  }
+  </script>
+</div>
+
+<!-- Bitcoin Chart Card -->
+<div class="white-card">
+  <div class="tradingview-widget-container">
+    <div id="tradingview_chart" style="height:100%;"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+      new TradingView.widget({
+        "container_id": "tradingview_chart",
+        "autosize": true,
+        "symbol": "BITSTAMP:BTCUSD",
+        "interval": "D",
+        "timezone": "Etc/UTC",
+        "theme": "light",               // Changed from "dark" to "light"
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#ffffff",        // Changed from dark to white
+        "enable_publishing": false,
+        "hide_top_toolbar": false,
+        "save_image": false,
+        "studies": [],
+        "withdateranges": true
+      });
+    </script>
+  </div>
+</div>
+
+      <!-- Trade Card -->
+      <div class="trade-card">
+        <!-- Buy Section -->
+        <div class="trade-box">
+          <label>Pair</label>
+          <select>
+            <option>BTC/USD</option>
+          </select>
+          <label>Amount</label>
+          <input type="number" placeholder="50" value="50" />
+          <label>Available Balance:</label>
+          <label id="buy-last-price">Last Price: 0.0</label>
+          <button class="trade-button buy-button">BUY</button>
+        </div>
+
+        <!-- Sell Section -->
+        <div class="trade-box">
+          <label>Pair</label>
+          <select>
+            <option>BTC/USD</option>
+          </select>
+          <label>Amount</label>
+          <input type="number" placeholder="50" value="50" />
+          <label>Available Balance:</label>
+          <label id="sell-last-price">Last Price: 0.0</label>
+          <button class="trade-button sell-button">SELL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Popup -->
+  <div class="modal-overlay active" id="modal">
+<div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <h2 id="modalTitle">KYC Verification Required</h2>
+  <p>To begin trading, please complete the Know Your Customer (KYC) verification process.</p>
+      <div class="modal-buttons">
+        <a href="/profile" class="modal-button deposit-button">Verify Now</a>
+        <button class="modal-button cancel-button" id="modalCancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('modal');
+    const cancelButton = document.getElementById('modalCancel');
+
+    // Modal is always visible on page load (class "active" already set in HTML)
+    // Disable clicking outside modal to close (no event for that)
+
+    // Cancel button redirects to dashboard page
+    cancelButton.addEventListener('click', () => {
+      window.location.href = '/dashboard';
+    });
+
+    // Fetch and update last price from CoinGecko API
+    async function fetchLastPrice() {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+        const data = await response.json();
+        const price = data.bitcoin.usd;
+        document.getElementById('buy-last-price').textContent = `Last Price: $${price.toFixed(2)}`;
+        document.getElementById('sell-last-price').textContent = `Last Price: $${price.toFixed(2)}`;
+      } catch (error) {
+        console.error('Failed to fetch last price:', error);
+      }
+    }
+
+    fetchLastPrice();
+    setInterval(fetchLastPrice, 10000);
+  </script>
+</body>
+</html>

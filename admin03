@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Admin Deposit Approval – Titanium FX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f1f3f5;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 1.5rem;
+      color: #f1f5f9;
+    }
+
+    .card-container {
+      background-color: #1e293b;
+      border-radius: 16px;
+      padding: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-container h2 {
+      color: #3b82f6;
+      font-size: 1.4rem;
+      margin-bottom: 1.2rem;
+      text-align: center;
+    }
+
+    .search-bar {
+      margin-bottom: 1.5rem;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: none;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      box-shadow: inset 0 0 0 1px #334155;
+    }
+
+    .entry {
+      background-color: #0f172a;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+      animation: fadeIn 0.4s ease-in;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    .entry-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .status {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .status.success {
+      background-color: #22c55e;
+      color: white;
+    }
+
+    .status.pending {
+      background-color: #facc15;
+      color: #1e293b;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-group button {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-group .approve {
+      background-color: #22c55e;
+      color: white;
+    }
+
+    .btn-group .approve:hover {
+      background-color: #16a34a;
+    }
+
+    .btn-group .reject {
+      background-color: #f97316;
+      color: white;
+    }
+
+    .btn-group .reject:hover {
+      background-color: #ea580c;
+    }
+
+    .loading-message,
+    .no-results {
+      text-align: center;
+      font-size: 1rem;
+      padding: 30px 0;
+      color: #94a3b8;
+      animation: pulseFade 1.5s infinite;
+    }
+
+    @keyframes pulseFade {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .entry-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- ========================= -->
+<!-- ✦ Welcome Box with Icon ✦ -->
+<!-- ========================= -->
+
+<div class="container welcome-box">
+  <div class="welcome-content">
+    <svg class="welcome-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#3b82f6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div class="welcome-text">
+      <h2>Welcome Admin</h2>
+    </div>
+  </div>
+</div>
+
+<style>
+  .container {
+    flex: 1;
+    background-color: #0f172a;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    color: #e2e8f0;
+    width: 100%;
+    max-width: 1000px;
+    height: 120px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .welcome-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .welcome-icon {
+    width: 40px;
+    height: 40px;
+    stroke-width: 2.2;
+    flex-shrink: 0;
+  }
+
+  .welcome-text h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #3b82f6;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 16px;
+      height: auto;
+    }
+
+    .welcome-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .welcome-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .welcome-text h2 {
+      font-size: 16px;
+    }
+  }
+</style>
+  <section class="card-container">
+    <h2>Admin Deposit Approvals</h2>
+
+    <div class="search-bar">
+      <input type="text" id="searchUid" placeholder="Enter User ID to filter..." oninput="loadDepositsByUid()" />
+    </div>
+
+    <div id="deposits" class="loading-message">🔍 Enter a User ID to search</div>
+  </section>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyD1nlcsxR7SkaB4hPVLcehdjV1bQPUXV5I",
+  authDomain: "stoctmartket-en.firebaseapp.com", // Assuming this typo is intentional and matches your actual Firebase project ID
+  projectId: "stoctmartket-en",
+  storageBucket: "stoctmartket-en.appspot.com", // FIXED: Correct Firebase storage bucket domain
+  messagingSenderId: "925990118609",
+  appId: "1:925990118609:web:77bdfd4c16bc584070d1f0"
+};
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const depositsDiv = document.getElementById('deposits');
+
+    function loadDepositsByUid() {
+      const uid = document.getElementById('searchUid').value.trim();
+      depositsDiv.innerHTML = '<div class="loading-message">Searching deposits...</div>';
+
+      if (!uid) {
+        depositsDiv.innerHTML = '<div class="no-results">🔍 Enter a User ID to search</div>';
+        return;
+      }
+
+      db.collection("users").doc(uid).collection("deposits").orderBy("createdAt", "desc").get()
+        .then(snapshot => {
+          depositsDiv.innerHTML = '';
+          if (snapshot.empty) {
+            depositsDiv.innerHTML = '<div class="no-results">🚫 No deposits found for this UID</div>';
+            return;
+          }
+
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            const div = document.createElement("div");
+            div.className = "entry";
+
+            const currency = data.currency?.toUpperCase() || "UNKNOWN";
+            const network = data.network?.toUpperCase() || "N/A";
+            const status = data.status || "pending";
+
+            div.innerHTML = `
+              <div class="entry-info">
+                <div><strong>${currency}</strong> - $${data.amount} (${network})</div>
+                <div class="status ${status}">${status.toUpperCase()}</div>
+              </div>
+              <div class="btn-group">
+                <button class="approve" onclick="updateStatus('${uid}', '${doc.id}', 'success')">Approve</button>
+                <button class="reject" onclick="updateStatus('${uid}', '${doc.id}', 'pending')">Pending</button>
+              </div>
+            `;
+
+            depositsDiv.appendChild(div);
+          });
+        })
+        .catch(err => {
+          depositsDiv.innerHTML = `<div class="no-results">❌ Error loading deposits: ${err.message}</div>`;
+        });
+    }
+
+    function updateStatus(uid, depositId, newStatus) {
+      db.collection("users").doc(uid).collection("deposits").doc(depositId).update({ status: newStatus })
+        .then(() => {
+          loadDepositsByUid();
+        })
+        .catch(err => alert("Error updating status: " + err.message));
+    }
+  </script>
+</body>
+</html>
